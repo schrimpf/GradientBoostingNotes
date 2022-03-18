@@ -1,3 +1,4 @@
+
 @article{belloni2014,
 author = {Belloni, Alexandre and Chernozhukov, Victor and Hansen, Christian},
 title = {Inference on Treatment Effects after Selection among High-Dimensional Controls†},
@@ -970,4 +971,101 @@ url = {https://www.sciencedirect.com/science/article/pii/S0169207020301114},
 author = {Casper Solheim Bojer and Jens Peder Meldgaard},
 keywords = {Time series methods, M competitions, Business forecasting, Forecast accuracy, Machine learning methods, Benchmarking, Time series visualization, Forecasting competition review},
 abstract = {We review the results of six forecasting competitions based on the online data science platform Kaggle, which have been largely overlooked by the forecasting community. In contrast to the M competitions, the competitions reviewed in this study feature daily and weekly time series with exogenous variables, business hierarchy information, or both. Furthermore, the Kaggle data sets all exhibit higher entropy than the M3 and M4 competitions, and they are intermittent. In this review, we confirm the conclusion of the M4 competition that ensemble models using cross-learning tend to outperform local time series models and that gradient boosted decision trees and neural networks are strong forecast methods. Moreover, we present insights regarding the use of external information and validation strategies, and discuss the impacts of data characteristics on the choice of statistics or machine learning methods. Based on these insights, we construct nine ex-ante hypotheses for the outcome of the M5 competition to allow empirical validation of our findings.}
+}
+
+@article{friedman2001,
+ ISSN = {00905364},
+  URL = {http://www.jstor.org/stable/2699986},
+   abstract = {Function estimation/approximation is viewed from the perspective of numerical optimization in function space, rather than parameter space. A connection is made between stagewise additive expansions and steepest-descent minimization. A general gradient descent "boosting" paradigm is developed for additive expansions based on any fitting criterion. Specific algorithms are presented for least-squares, least absolute deviation, and Huber-M loss functions for regression, and multiclass logistic likelihood for classification. Special enhancements are derived for the particular case where the individual additive components are regression trees, and tools for interpreting such "TreeBoost" models are presented. Gradient boosting of regression trees produces competitive, highly robust, interpretable procedures for both regression and classification, especially appropriate for mining less than clean data. Connections between this approach and the boosting methods of Freund and Shapire and Friedman, Hastie and Tibshirani are discussed.},
+    author = {Jerome H. Friedman},
+     journal = {The Annals of Statistics},
+      number = {5},
+       pages = {1189--1232},
+        publisher = {Institute of Mathematical Statistics},
+         title = {Greedy Function Approximation: A Gradient Boosting Machine},
+          volume = {29},
+           year = {2001}
+           }
+
+
+@article{friedman2002,
+title = {Stochastic gradient boosting},
+journal = {Computational Statistics & Data Analysis},
+volume = {38},
+number = {4},
+pages = {367-378},
+year = {2002},
+note = {Nonlinear Methods and Data Mining},
+issn = {0167-9473},
+doi = {https://doi.org/10.1016/S0167-9473(01)00065-2},
+url = {https://www.sciencedirect.com/science/article/pii/S0167947301000652},
+author = {Jerome H. Friedman},
+abstract = {Gradient boosting constructs additive regression models by sequentially fitting a simple parameterized function (base learner) to current “pseudo”-residuals by least squares at each iteration. The pseudo-residuals are the gradient of the loss functional being minimized, with respect to the model values at each training data point evaluated at the current step. It is shown that both the approximation accuracy and execution speed of gradient boosting can be substantially improved by incorporating randomization into the procedure. Specifically, at each iteration a subsample of the training data is drawn at random (without replacement) from the full training data set. This randomly selected subsample is then used in place of the full sample to fit the base learner and compute the model update for the current iteration. This randomized approach also increases robustness against overcapacity of the base learner.}
+}
+
+
+@article{yang2020,
+title = {Double machine learning with gradient boosting and its application to the Big N audit quality effect},
+journal = {Journal of Econometrics},
+volume = {216},
+number = {1},
+pages = {268-283},
+year = {2020},
+note = {Annals Issue in honor of George Tiao: Statistical Learning for Dependent Data},
+issn = {0304-4076},
+doi = {https://doi.org/10.1016/j.jeconom.2020.01.018},
+url = {https://www.sciencedirect.com/science/article/pii/S0304407620300245},
+author = {Jui-Chung Yang and Hui-Ching Chuang and Chung-Ming Kuan},
+keywords = {Audit quality, Average treatment effect, Big N effect, Double machine learning, Gradient boosting, Performance-matched discretionary accruals},
+abstract = {In this paper, we study the double machine learning (DML) approach of Chernozhukov et al. (2018) for estimating average treatment effect and apply this approach to examine the Big N audit quality effect in the accounting literature. This approach relies on machine learning methods and is suitable when a high dimensional nuisance function with many covariates is present in the model. This approach does not suffer from the “regularization bias” when a learning method with a proper convergence rate is used. We demonstrate by simulations that, for the DML approach, the gradient boosting method is fairly robust and to be preferred to other methods, such as regression tree, random forest, support vector regression machine, and the conventional Nadaraya–Watson nonparametric estimator. We then apply the DML approach with gradient boosting to estimate the Big N effect. We find that Big N auditors have a positive effect on audit quality and that this effect is not only statistically significant but also economically important. We further show that, in contrast to the results of propensity score matching, our estimates of said effect are quite robust to the hyper-parameters in the gradient boosting algorithm.}
+}
+
+@article{zhang2005,
+author = {Tong Zhang and Bin Yu},
+title = {{Boosting with early stopping: Convergence and consistency}},
+volume = {33},
+journal = {The Annals of Statistics},
+number = {4},
+publisher = {Institute of Mathematical Statistics},
+pages = {1538 -- 1579},
+keywords = {boosting, consistency, early stopping, greedy optimization, matching pursuit},
+year = {2005},
+doi = {10.1214/009053605000000255},
+URL = {https://doi.org/10.1214/009053605000000255}
+}
+
+
+@misc{zhou2018,
+Author = {Yichen Zhou and Giles Hooker},
+Title = {Boulevard: Regularized Stochastic Gradient Boosted Trees and Their Limiting Distribution},
+Year = {2018},
+Eprint = {arXiv:1806.09762},
+}
+
+@misc{dombry2021,
+Author = {Clément Dombry and Jean-Jil Duchamps},
+Title = {Infinitesimal gradient boosting},
+Year = {2021},
+Eprint = {arXiv:2104.13208},
+}
+
+@misc{kueck2017,
+Author = {Jannis Kueck and Ye Luo and Martin Spindler and Zigan Wang},
+Title = {Estimation and Inference of Treatment Effects with $L_2$-Boosting in High-Dimensional Settings},
+Year = {2017},
+Eprint = {arXiv:1801.00364},
+}
+
+@misc{luo2016,
+Author = {Ye Luo and Martin Spindler},
+Title = {High-Dimensional $L_2$Boosting: Rate of Convergence},
+Year = {2016},
+Eprint = {arXiv:1602.08927},
+}
+
+@misc{cns2018,
+Author = {Victor Chernozhukov and Whitney K Newey and Rahul Singh},
+Title = {Automatic Debiased Machine Learning of Causal and Structural Effects},
+Year = {2018},
+Eprint = {arXiv:1809.05224},
 }
