@@ -130,7 +130,7 @@
               </ul>
             </li>
             
-            <li class="nav-item" data-level="1"><a href="#references" class="nav-link">References</a>
+            <li class="nav-item" data-level="1"><a href="#bibliography" class="nav-link">Bibliography</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -177,8 +177,9 @@ with the following regression or classification problem.</p>
 </script>
 </p>
 <p>where $L$ is some loss function and $\mathcal{F}$ is some family of
-functions. For example if $L$ is sqaured error and $\mathcal{F}$ is
-polynomials of $x$, then this problem becomes series regression.</p>
+functions. For example if</p>
+<p>$L$ is sqaured error and $\mathcal{F}$ is polynomials of $x$, then this
+problem becomes series regression.</p>
 <p>Gradient boosting focuses on the case where $\mathcal{F}$ is an additive
 sum of “simple” learners.</p>
 <p>
@@ -186,10 +187,11 @@ sum of “simple” learners.</p>
  \mathcal{F} = \{ F(x;\beta, a) = \sum_{m=1}^M \beta_m h(x;a_m)
 </script>
 </p>
-<p>For example, if $h(x; a_m) = \psi(x&rsquo;a_m)$ where $\psi$ is some
-activation function, then $\mathcal{F}$ would be a single layer neural
-network of width $M$. Gradient boosting is most often used when
-$h(x;a_m)$ is a shallow decision tree.</p>
+<p>For example, if <script type="math/tex; mode=display">
+h(x; a_m) = \psi(x'a_m)
+</script> where $\psi$ is some activation function, then $\mathcal{F}$ would be
+a single layer neural network of width $M$. Gradient boosting is most
+often used when $h(x;a_m)$ is a shallow decision tree.</p>
 <p>Fully minimizing over $\beta$ and $a$ can be difficult. Therefore,
 gradient boosting computes an approximate minimum through a greedy,
 stagewise approach.</p>
@@ -332,7 +334,7 @@ that it can outperform XGBoost.</p>
 in expression starting at /home/paul/.julia/dev/GradientBoostingNotes/docs/
 jmd/gb.jmd:2
 </code></pre>
-<h1 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h1></div>
+<h1 id="bibliography">Bibliography<a class="headerlink" href="#bibliography" title="Permanent link">&para;</a></h1></div>
             </div>
         </div>
 
