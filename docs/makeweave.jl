@@ -1,5 +1,3 @@
-using NeuralNetworkEconomics
-
 runweave= "weave" ∈ ARGS
 runnotebook= "notebook" ∈ ARGS
 
@@ -23,4 +21,3 @@ end
 if (isfile("build/temp.md"))
   rm("build/temp.md")
 end
-

@@ -35,18 +35,6 @@ docs_dir: 'build'
 
 nav:
   - Package Docs: index.md
-  - ML in Economics:
-    - Introduction: ml-intro.md
-    - Methods: ml-methods.md
-    - Inference: ml-doubledebiased.md
-    - Detecting heterogeneity: mlExamplePKH.md
-    - With Julia : ml-julia.md
-  - Neural Networks:    
-    - Introduction: slp.md
-    - Multi-Layer: mlp.md
-    - Convolutional: conv.md
-    - Recurrent: rnn.md
-    - In semiparametric models: nn-semiparametric.md
+  - Notes: gb.md
   - About:
     - License: license.md
-    

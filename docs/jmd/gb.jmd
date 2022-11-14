@@ -36,7 +36,7 @@ markdown = try
   "md" in keys(WEAVE_ARGS) && WEAVE_ARGS["md"]
 catch
   false
-end
+End
 
 if !("DISPLAY" ∈ keys(ENV))
   # Make gr and pyplot backends for Plots work without a DISPLAY
@@ -80,7 +80,9 @@ $$
 $$
 
 where $L$ is some loss function and $\mathcal{F}$ is some family of
-functions. For example if $L$ is sqaured error and $\mathcal{F}$ is
+functions. For example if
+
+$L$ is sqaured error and $\mathcal{F}$ is
 polynomials of $x$, then this problem becomes series regression.
 
 Gradient boosting focuses on the case where $\mathcal{F}$ is an additive sum of "simple" learners.
@@ -89,7 +91,11 @@ $$
  \mathcal{F} = \{ F(x;\beta, a) = \sum_{m=1}^M \beta_m h(x;a_m)
 $$
 
-For example, if $h(x; a_m) = \psi(x'a_m)$ where $\psi$ is some
+For example, if
+$$
+h(x; a_m) = \psi(x'a_m)
+$$
+where $\psi$ is some
 activation function, then $\mathcal{F}$ would be a single layer neural
 network of width $M$. Gradient boosting is most often used when
 $h(x;a_m)$ is a shallow decision tree.
@@ -188,6 +194,8 @@ representation in terms of these indicators.
 ```julia
 import Zygote
 import LinearAlgebra: dot
+using MLJ
+import MLJBase
 
 function gradientboost(y, X, loss, baselearner; steps=100, stepsize=0.1, linesearch=false)
   F = Vector{Function}(undef, steps)
@@ -228,6 +236,16 @@ plot!(xs, f.(xs))
 for m ∈ eachindex(F)
   plot!(xs, F[m](reshape(xs, size(X))), alpha=m/length(F), colour=:black,legend=false)
 end
+
+function showplot(m)
+  scatter(X, y)
+  p = sortperm(vec(X))
+  xs = X[p]
+  plot!(xs, f.(xs))
+  plot!(xs, F[m](reshape(xs, size(X))), alpha=m/length(F), colour=:black,legend=false)
+end
+
+
 ```
 
 # Packages
@@ -251,4 +269,4 @@ that it can outperform XGBoost.
 ```
 
 
-# References
+# Bibliography

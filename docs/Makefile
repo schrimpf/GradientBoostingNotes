@@ -38,8 +38,11 @@ $(mdout) : build/%.md : md/%.md
 $(nbout) : build/%.ipynb : %.jmd
 	$(WEAVE) $< $@  notebook
 
-$(docout) : build/%.md :  src/%.md
-	julia -e "using Documenter, NeuralNetworkEconomics, DocumenterMarkdown; makedocs( modules=[NeuralNetworkEconomics],  format=Markdown(), clean=false,  pages=[  \"Home\" => \"index.md\" ], repo=\"https://github.com/schrimpf/NeuralNetworkEconomics.jl/blob/{commit}{path}#L{line}\",  sitename=\"NeuralNetworkEconomics.jl\",  authors=\"Paul Schrimpf <paul.schrimpf@gmail.com>\")"
+# $(docout) : build/%.md :  src/%.md
+# 	julia -e "using Documenter, NeuralNetworkEconomics, DocumenterMarkdown; makedocs( modules=[NeuralNetworkEconomics],  format=Markdown(), clean=false,  pages=[  \"Home\" => \"index.md\" ], repo=\"https://github.com/schrimpf/NeuralNetworkEconomics.jl/blob/{commit}{path}#L{line}\",  sitename=\"NeuralNetworkEconomics.jl\",  authors=\"Paul Schrimpf <paul.schrimpf@gmail.com>\")"
+
+build/license.md: src/license.md
+	cp src/license.md build/license.md
 
 site: site/index.html
 
