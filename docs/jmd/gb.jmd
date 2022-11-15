@@ -4,7 +4,7 @@ subtitle    : ""
 author      : Paul Schrimpf
 date        : `j using Dates; print(Dates.today())`
 bibliography: "../ml.bib"
-options:
+weave_options:
       out_width : 100%
       wrap : true
       fig_width : 800
@@ -27,8 +27,6 @@ $$
 \def\Pr{\mathrm{P}}
 \newcommand{\norm}[1]{\left\Vert {#1} \right\Vert}
 \newcommand{\abs}[1]{\left\vert {#1} \right\vert}
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
 $$
 
 ```julia; echo=false; results="hidden"
@@ -69,14 +67,13 @@ See [this.](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-methods/#ran
 
 # Gradient Boosting
 
-Gradient boosting was first described in detail by @friedman2001, but the
-
+Gradient boosting was first described in detail by @friedman2001,
 and its stochastic
 variant in @friedman2002. Gradient boosting deals with the following
 regression or classification problem.
 
 $$
-\min_{F \in mathcal{F}} E_x \left[ E_y\left[ L(y, F(x)) | x \right] \right]
+\min_{F \in \mathcal{F}} E_x \left[ E_y\left[ L(y, F(x)) | x \right] \right]
 $$
 
 where $L$ is some loss function and $\mathcal{F}$ is some family of
@@ -88,7 +85,7 @@ polynomials of $x$, then this problem becomes series regression.
 Gradient boosting focuses on the case where $\mathcal{F}$ is an additive sum of "simple" learners.
 
 $$
- \mathcal{F} = \{ F(x;\beta, a) = \sum_{m=1}^M \beta_m h(x;a_m)
+\mathcal{F} = \{ F(x;\beta, a) = \sum_{m=1}^M \beta_m h(x;a_m) \}
 $$
 
 For example, if
@@ -118,7 +115,7 @@ $$
 \frac{\partial Q(F_{m-1}}{\partial F} = E_y\left[\frac{\partial L(y, F_{m-1}(x))}{\partial F(x)} | x \right]
 $$
 
-2. Set $F_m = F_{m-1} - \nu \frac{\partial Q(F_{m-1}}}{\partial F}$
+2. Set $F_m = F_{m-1} - \nu \frac{\partial Q(F_{m-1})}{\partial F}$
 
 3. Repeat
 
@@ -132,11 +129,11 @@ a direction that obeys the constraint and is close to the gradient. Specifically
 
 1. Choose $a_m$ to approximate the gradient:
 $$
-a_m = \argmin_a \sum_{i=1}^N \left( \frac{\partial -L(y_i, F_{m-1}(x_i))}{\partial F(x)} - h(x_i; a) \right)^2
+a_m = \textrm{arg}\min_a \sum_{i=1}^N \left( \frac{\partial -L(y_i, F_{m-1}(x_i))}{\partial F(x)} - h(x_i; a) \right)^2
 $$
 2. Line search:
 $$
-\rho_m = \argmin_\rho \sum_{i=1}^N L\left( y_i, F_{m-1}(x_i) + \rho h(x_i;a_m) \right)
+\rho_m = \textrm{arg}\min_\rho \sum_{i=1}^N L\left( y_i, F_{m-1}(x_i) + \rho h(x_i;a_m) \right)
 $$
 3. Update:
 $$
@@ -162,12 +159,12 @@ function of only one component of $x$. Therefore we should expect to
 be able to approximate additively separable functions like
 
 $$
-f_1(x_1) + f_2(x_2) + ... + f_k(x_k)$
+f_1(x_1) + f_2(x_2) + ... + f_k(x_k)
 $$
 
 well. Trees with two splits can accomodate pairwise interactions, etc.
 
-## Statistical Properties
+## Statistical Properties and References
 
 @zhang2005 has consistency and convergence rate results. Whether those
 results are compatible with double machine learning is not yet clear
@@ -179,8 +176,11 @@ functions considered is too rich to get fast convergence rates.
 
 @dombry2021 ODE view of boosting
 
-In high dimensional settings (i.e. $x$ is high dimensional) there is a
-relationship between boosting and lasso, see @luo2016 and @kueck2017.
+@yang2020 has simulation evidence that gradient boosting outperforms other methods in
+double machine learning, but not formal proofs.
+
+In high dimensional settings (i.e. $x$ is high dimensional, and $h(x,a_m)$ is selecting one covariate)
+there is a relationship between boosting and lasso, see @luo2016 and @kueck2017.
 
 Note: A creative definition of $x$ as indicators that your base tree
 can generate might make @luo2016 results applicable to boosting
@@ -188,6 +188,7 @@ trees. The key would be verifying the sparse eigenvalue condition A.2,
 and the restriction that the "true" function has a sparse
 representation in terms of these indicators.
 
+@yue2022 and @bakhitov2022 combine boosting with instrumental variables.
 
 # Example Code
 
@@ -220,7 +221,7 @@ function gradientboost(y, X, loss, baselearner; steps=100, stepsize=0.1, linesea
 end
 
 @load DecisionTreeRegressor pkg=BetaML
-baselearner = BetaML.Trees.DecisionTreeRegressor(maxDepth=2)
+baselearner = BetaML.Trees.DecisionTreeRegressor(max_depth=2)
 X = rand(200, 1)
 f(x) = sum(x.^2)
 σ = 0.1
@@ -229,6 +230,7 @@ loss(Y,Ŷ) = sum( (y-ŷ)^2 for (y, ŷ) ∈ zip(Y, Ŷ) )
 F = gradientboost(y,X, loss, baselearner,stepsize=0.1, linesearch=true, steps=100)
 
 using Plots
+Plots.pyplot()
 scatter(X, y)
 p = sortperm(vec(X))
 xs = X[p]
@@ -236,17 +238,11 @@ plot!(xs, f.(xs))
 for m ∈ eachindex(F)
   plot!(xs, F[m](reshape(xs, size(X))), alpha=m/length(F), colour=:black,legend=false)
 end
-
-function showplot(m)
-  scatter(X, y)
-  p = sortperm(vec(X))
-  xs = X[p]
-  plot!(xs, f.(xs))
-  plot!(xs, F[m](reshape(xs, size(X))), alpha=m/length(F), colour=:black,legend=false)
-end
-
-
+plot!()
 ```
+
+## Alternate baselearner
+
 
 # Packages
 
@@ -261,11 +257,9 @@ same algorithm improvements that LightGBM does. Benchmarks on the
 that it can outperform XGBoost.
 
 ```julia
-@load LGBMRegressor
-@load XGBoostRegressor
-@load EvoTreeRegressor
-
-
+#lgbm = @load LGBMRegressor
+#xgboost = @load XGBoostRegressor
+#evo = @load EvoTreeRegressor
 ```
 
 

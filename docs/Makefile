@@ -1,7 +1,7 @@
 BIB = ml.bib
-PANDOC = pandoc --bibliography $(BIB) -f markdown -t markdown_mmd-citations --metadata link-citations=true
+PANDOC = pandoc --citeproc --bibliography $(BIB) -f markdown -t markdown_mmd-citations --metadata link-citations=true
 
-WEAVE = julia makeweave.jl
+WEAVE = julia --project=. makeweave.jl
 vpath %.jmd jmd
 
 
