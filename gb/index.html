@@ -113,7 +113,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#statistical-properties" class="nav-link">Statistical Properties</a>
+            <li class="nav-item" data-level="2"><a href="#statistical-properties-and-references" class="nav-link">Statistical Properties and References</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -122,6 +122,10 @@
             
             <li class="nav-item" data-level="1"><a href="#example-code" class="nav-link">Example Code</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#alternate-baselearner" class="nav-link">Alternate baselearner</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
             
@@ -130,7 +134,7 @@
               </ul>
             </li>
             
-            <li class="nav-item" data-level="1"><a href="#bibliography" class="nav-link">Bibliography</a>
+            <li class="nav-item" data-level="1"><a href="#bibliography-bibliography" class="nav-link">Bibliography [bibliography]</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -152,28 +156,27 @@ License</a></p>
 \def\Pr{\mathrm{P}}
 \newcommand{\norm}[1]{\left\Vert {#1} \right\Vert}
 \newcommand{\abs}[1]{\left\vert {#1} \right\vert}
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
 </script>
 </p>
 <h1 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h1>
 <p>Variants of gradient boosting decision trees often win prediction
-contests (e.g. @bojer2021 and @m5accuracy ). @yang2020 examine the
-peformance of various estimation methods in double machine learning.
-They compare gradient boosted trees, random forests, lasso, neural
-networks, and support vector machines, and find that gradient boosting
-performs best.</p>
+contests (e.g. Bojer and Meldgaard (<a href="#ref-bojer2021">2021</a>) and
+Makridakis, Spiliotis, and Assimakopoulos (<a href="#ref-m5accuracy">2022</a>) ).
+Yang, Chuang, and Kuan (<a href="#ref-yang2020">2020</a>) examine the peformance of
+various estimation methods in double machine learning. They compare
+gradient boosted trees, random forests, lasso, neural networks, and
+support vector machines, and find that gradient boosting performs best.</p>
 <h1 id="decision-trees">Decision Trees<a class="headerlink" href="#decision-trees" title="Permanent link">&para;</a></h1>
 <p>See
 <a href="https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-methods/#random-forests">this.</a></p>
 <h1 id="gradient-boosting">Gradient Boosting<a class="headerlink" href="#gradient-boosting" title="Permanent link">&para;</a></h1>
-<p>Gradient boosting was first described in detail by @friedman2001, but
-the</p>
-<p>and its stochastic variant in @friedman2002. Gradient boosting deals
-with the following regression or classification problem.</p>
+<p>Gradient boosting was first described in detail by Friedman
+(<a href="#ref-friedman2001">2001</a>), and its stochastic variant in Friedman
+(<a href="#ref-friedman2002">2002</a>). Gradient boosting deals with the following
+regression or classification problem.</p>
 <p>
 <script type="math/tex; mode=display">
-\min_{F \in mathcal{F}} E_x \left[ E_y\left[ L(y, F(x)) | x \right] \right]
+\min_{F \in \mathcal{F}} E_x \left[ E_y\left[ L(y, F(x)) | x \right] \right]
 </script>
 </p>
 <p>where $L$ is some loss function and $\mathcal{F}$ is some family of
@@ -184,7 +187,7 @@ problem becomes series regression.</p>
 sum of “simple” learners.</p>
 <p>
 <script type="math/tex; mode=display">
- \mathcal{F} = \{ F(x;\beta, a) = \sum_{m=1}^M \beta_m h(x;a_m)
+\mathcal{F} = \{ F(x;\beta, a) = \sum_{m=1}^M \beta_m h(x;a_m) \}
 </script>
 </p>
 <p>For example, if <script type="math/tex; mode=display">
@@ -209,7 +212,7 @@ $F_0(m)$, and then:</p>
 </p>
 </li>
 <li>
-<p>Set $F_m = F_{m-1} - \nu \frac{\partial Q(F_{m-1}}}{\partial F}$</p>
+<p>Set $F_m = F_{m-1} - \nu \frac{\partial Q(F_{m-1})}{\partial F}$</p>
 </li>
 <li>
 <p>Repeat</p>
@@ -224,11 +227,11 @@ direction that obeys the constraint and is close to the gradient.
 Specifically,</p>
 <ol>
 <li>Choose $a_m$ to approximate the gradient: <script type="math/tex; mode=display">
-    a_m = \argmin_a \sum_{i=1}^N \left( \frac{\partial -L(y_i, F_{m-1}(x_i))}{\partial F(x)} - h(x_i; a) \right)^2
+    a_m = \textrm{arg}\min_a \sum_{i=1}^N \left( \frac{\partial -L(y_i, F_{m-1}(x_i))}{\partial F(x)} - h(x_i; a) \right)^2
     </script>
 </li>
 <li>Line search: <script type="math/tex; mode=display">
-    \rho_m = \argmin_\rho \sum_{i=1}^N L\left( y_i, F_{m-1}(x_i) + \rho h(x_i;a_m) \right)
+    \rho_m = \textrm{arg}\min_\rho \sum_{i=1}^N L\left( y_i, F_{m-1}(x_i) + \rho h(x_i;a_m) \right)
     </script>
 </li>
 <li>Update: <script type="math/tex; mode=display">
@@ -239,8 +242,8 @@ Specifically,</p>
 </ol>
 <p>Notice that when $L$ is squared error loss, then step 1 becomes fitting
 $h(x_i;a)$ to the residuals. This idea of updating a model by fitting
-the residuals existed before @friedman2001 , and is where the name
-“boosting” originates.</p>
+the residuals existed before Friedman (<a href="#ref-friedman2001">2001</a>) , and
+is where the name “boosting” originates.</p>
 <h2 id="regularization">Regularization<a class="headerlink" href="#regularization" title="Permanent link">&para;</a></h2>
 <p>There are at least three parameters that affect model complexity: the
 number of iterations, $M$, the step size / shrinkage parameter, $\nu$,
@@ -250,27 +253,36 @@ type of functions that the model can well approximate. If $h(x,a)$ are
 stubs – trees with a single split, then each $h(x,a)$ is a function of
 only one component of $x$. Therefore we should expect to be able to
 approximate additively separable functions like</p>
-<p>$$
-f_1(x_1) + f_2(x_2) + &hellip; + f_k(x_k)$
-$$</p>
+<p>
+<script type="math/tex; mode=display">
+f_1(x_1) + f_2(x_2) + ... + f_k(x_k)
+</script>
+</p>
 <p>well. Trees with two splits can accomodate pairwise interactions, etc.</p>
-<h2 id="statistical-properties">Statistical Properties<a class="headerlink" href="#statistical-properties" title="Permanent link">&para;</a></h2>
-<p>@zhang2005 has consistency and convergence rate results. Whether those
-results are compatible with double machine learning is not yet clear to
-me.</p>
-<p>@zhou2018 also appears relevant. It gives pointwise asymptotic
-normality. Like Athey et al’s results for forests, the class of
-functions considered is too rich to get fast convergence rates.</p>
-<p>@dombry2021 ODE view of boosting</p>
-<p>@yang2020 has simulation evidence that gradient boosting outperforms
-other methods in double machine learning, but not formal proofs.</p>
-<p>In high dimensional settings (i.e. $x$ is high dimensional) there is a
-relationship between boosting and lasso, see @luo2016 and @kueck2017.</p>
+<h2 id="statistical-properties-and-references">Statistical Properties and References<a class="headerlink" href="#statistical-properties-and-references" title="Permanent link">&para;</a></h2>
+<p>Zhang and Yu (<a href="#ref-zhang2005">2005</a>) has consistency and convergence
+rate results. Whether those results are compatible with double machine
+learning is not yet clear to me.</p>
+<p>Zhou and Hooker (<a href="#ref-zhou2018">2018</a>) also appears relevant. It gives
+pointwise asymptotic normality. Like Athey et al’s results for forests,
+the class of functions considered is too rich to get fast convergence
+rates.</p>
+<p>Dombry and Duchamps (<a href="#ref-dombry2021">2021</a>) ODE view of boosting</p>
+<p>Yang, Chuang, and Kuan (<a href="#ref-yang2020">2020</a>) has simulation evidence
+that gradient boosting outperforms other methods in double machine
+learning, but not formal proofs.</p>
+<p>In high dimensional settings (i.e. $x$ is high dimensional, and
+$h(x,a_m)$ is selecting one covariate) there is a relationship between
+boosting and lasso, see Luo and Spindler (<a href="#ref-luo2016">2016</a>) and
+Kueck et al. (<a href="#ref-kueck2017">2017</a>).</p>
 <p>Note: A creative definition of $x$ as indicators that your base tree can
-generate might make @luo2016 results applicable to boosting trees. The
-key would be verifying the sparse eigenvalue condition A.2, and the
-restriction that the “true” function has a sparse representation in
-terms of these indicators.</p>
+generate might make Luo and Spindler (<a href="#ref-luo2016">2016</a>) results
+applicable to boosting trees. The key would be verifying the sparse
+eigenvalue condition A.2, and the restriction that the “true” function
+has a sparse representation in terms of these indicators.</p>
+<p>Yue, Li, and Sun (<a href="#ref-yue2022">2022</a>) and Bakhitov and Singh
+(<a href="#ref-bakhitov2022">2022</a>) combine boosting with instrumental
+variables.</p>
 <h1 id="example-code">Example Code<a class="headerlink" href="#example-code" title="Permanent link">&para;</a></h1>
 <pre><code class="language-julia">import Zygote
 import LinearAlgebra: dot
@@ -309,6 +321,7 @@ loss(Y,Ŷ) = sum( (y-ŷ)^2 for (y, ŷ) ∈ zip(Y, Ŷ) )
 F = gradientboost(y,X, loss, baselearner,stepsize=0.1, linesearch=true, steps=100)
 
 using Plots
+Plots.pyplot()
 scatter(X, y)
 p = sortperm(vec(X))
 xs = X[p]
@@ -316,18 +329,12 @@ plot!(xs, f.(xs))
 for m ∈ eachindex(F)
   plot!(xs, F[m](reshape(xs, size(X))), alpha=m/length(F), colour=:black,legend=false)
 end
-
-function showplot(m)
-  scatter(X, y)
-  p = sortperm(vec(X))
-  xs = X[p]
-  plot!(xs, f.(xs))
-  plot!(xs, F[m](reshape(xs, size(X))), alpha=m/length(F), colour=:black,legend=false)
-end
+plot!()
 </code></pre>
 <pre><code>import BetaML ✔
-showplot (generic function with 1 method)
 </code></pre>
+<p><img alt="" src="figures/gb_2_1.png" /></p>
+<h2 id="alternate-baselearner">Alternate baselearner<a class="headerlink" href="#alternate-baselearner" title="Permanent link">&para;</a></h2>
 <h1 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h1>
 <p>The above code is just for demonstration. It is better to use a package
 for gradient boosting. We will focus on gradient boosting trees. The two
@@ -338,16 +345,77 @@ Julia implementation and uses some of the same algorithm improvements
 that LightGBM does. Benchmarks on the
 <a href="https://github.com/Evovest/EvoTrees.jl">EvoTrees</a> github readme show
 that it can outperform XGBoost.</p>
-<pre><code class="language-julia">lgbm = @load LGBMRegressor
-xgboost = @load XGBoostRegressor
-evo = @load EvoTreeRegressor
+<pre><code class="language-julia">#lgbm = @load LGBMRegressor
+#xgboost = @load XGBoostRegressor
+#evo = @load EvoTreeRegressor
 </code></pre>
-<pre><code>import LightGBM ✔
-import MLJXGBoostInterface ✔
-import EvoTrees ✔
-EvoTrees.EvoTreeRegressor
-</code></pre>
-<h1 id="bibliography">Bibliography<a class="headerlink" href="#bibliography" title="Permanent link">&para;</a></h1></div>
+<h1 id="bibliography-bibliography">Bibliography [bibliography]<a class="headerlink" href="#bibliography-bibliography" title="Permanent link">&para;</a></h1>
+<div class="references csl-bib-body hanging-indent" id="refs">
+<div class="csl-entry" id="ref-bakhitov2022">
+<p>Bakhitov, Edvard, and Amandeep Singh. 2022. “Causal Gradient Boosting:
+Boosted Instrumental Variable Regression.” In <em>Proceedings of the 23rd
+ACM Conference on Economics and Computation</em>, 604–5. EC ’22. New York,
+NY, USA: Association for Computing Machinery.
+<a href="https://doi.org/10.1145/3490486.3538251">https://doi.org/10.1145/3490486.3538251</a>.</p>
+</div>
+<div class="csl-entry" id="ref-bojer2021">
+<p>Bojer, Casper Solheim, and Jens Peder Meldgaard. 2021. “Kaggle
+Forecasting Competitions: An Overlooked Learning Opportunity.”
+<em>International Journal of Forecasting</em> 37 (2): 587–603.
+https://doi.org/<a href="https://doi.org/10.1016/j.ijforecast.2020.07.007">https://doi.org/10.1016/j.ijforecast.2020.07.007</a>.</p>
+</div>
+<div class="csl-entry" id="ref-dombry2021">
+<p>Dombry, Clément, and Jean-Jil Duchamps. 2021. “Infinitesimal Gradient
+Boosting.”</p>
+</div>
+<div class="csl-entry" id="ref-friedman2001">
+<p>Friedman, Jerome H. 2001. “Greedy Function Approximation: A Gradient
+Boosting Machine.” <em>The Annals of Statistics</em> 29 (5): 1189–1232.
+<a href="http://www.jstor.org/stable/2699986">http://www.jstor.org/stable/2699986</a>.</p>
+</div>
+<div class="csl-entry" id="ref-friedman2002">
+<p>———. 2002. “Stochastic Gradient Boosting.” <em>Computational Statistics &amp;
+Data Analysis</em> 38 (4): 367–78.
+https://doi.org/<a href="https://doi.org/10.1016/S0167-9473(01)00065-2">https://doi.org/10.1016/S0167-9473(01)00065-2</a>.</p>
+</div>
+<div class="csl-entry" id="ref-kueck2017">
+<p>Kueck, Jannis, Ye Luo, Martin Spindler, and Zigan Wang. 2017.
+“Estimation and Inference of Treatment Effects with $L_2$-Boosting in
+High-Dimensional Settings.”</p>
+</div>
+<div class="csl-entry" id="ref-luo2016">
+<p>Luo, Ye, and Martin Spindler. 2016. “High-Dimensional $L_2$Boosting:
+Rate of Convergence.”</p>
+</div>
+<div class="csl-entry" id="ref-m5accuracy">
+<p>Makridakis, Spyros, Evangelos Spiliotis, and Vassilios Assimakopoulos.
+2022. “M5 Accuracy Competition: Results, Findings, and Conclusions.”
+<em>International Journal of Forecasting</em>.
+https://doi.org/<a href="https://doi.org/10.1016/j.ijforecast.2021.11.013">https://doi.org/10.1016/j.ijforecast.2021.11.013</a>.</p>
+</div>
+<div class="csl-entry" id="ref-yang2020">
+<p>Yang, Jui-Chung, Hui-Ching Chuang, and Chung-Ming Kuan. 2020. “Double
+Machine Learning with Gradient Boosting and Its Application to the Big n
+Audit Quality Effect.” <em>Journal of Econometrics</em> 216 (1): 268–83.
+https://doi.org/<a href="https://doi.org/10.1016/j.jeconom.2020.01.018">https://doi.org/10.1016/j.jeconom.2020.01.018</a>.</p>
+</div>
+<div class="csl-entry" id="ref-yue2022">
+<p>Yue, Mu, Jialiang Li, and Baoluo Sun. 2022. “Conditional Sparse Boosting
+for High-Dimensional Instrumental Variable Estimation.” <em>Journal of
+Statistical Computation and Simulation</em> 92 (15): 3087–3108.
+<a href="https://doi.org/10.1080/00949655.2022.2056739">https://doi.org/10.1080/00949655.2022.2056739</a>.</p>
+</div>
+<div class="csl-entry" id="ref-zhang2005">
+<p>Zhang, Tong, and Bin Yu. 2005. “<span class="nocase">Boosting with early
+stopping: Convergence and consistency</span>.” <em>The Annals of
+Statistics</em> 33 (4): 1538–79.
+<a href="https://doi.org/10.1214/009053605000000255">https://doi.org/10.1214/009053605000000255</a>.</p>
+</div>
+<div class="csl-entry" id="ref-zhou2018">
+<p>Zhou, Yichen, and Giles Hooker. 2018. “Boulevard: Regularized Stochastic
+Gradient Boosted Trees and Their Limiting Distribution.”</p>
+</div>
+</div></div>
             </div>
         </div>
 
