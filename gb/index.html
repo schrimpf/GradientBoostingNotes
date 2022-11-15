@@ -262,6 +262,8 @@ me.</p>
 normality. Like Athey et al’s results for forests, the class of
 functions considered is too rich to get fast convergence rates.</p>
 <p>@dombry2021 ODE view of boosting</p>
+<p>@yang2020 has simulation evidence that gradient boosting outperforms
+other methods in double machine learning, but not formal proofs.</p>
 <p>In high dimensional settings (i.e. $x$ is high dimensional) there is a
 relationship between boosting and lasso, see @luo2016 and @kueck2017.</p>
 <p>Note: A creative definition of $x$ as indicators that your base tree can
@@ -272,6 +274,8 @@ terms of these indicators.</p>
 <h1 id="example-code">Example Code<a class="headerlink" href="#example-code" title="Permanent link">&para;</a></h1>
 <pre><code class="language-julia">import Zygote
 import LinearAlgebra: dot
+using MLJ
+import MLJBase
 
 function gradientboost(y, X, loss, baselearner; steps=100, stepsize=0.1, linesearch=false)
   F = Vector{Function}(undef, steps)
@@ -296,7 +300,7 @@ function gradientboost(y, X, loss, baselearner; steps=100, stepsize=0.1, linesea
 end
 
 @load DecisionTreeRegressor pkg=BetaML
-baselearner = BetaML.Trees.DecisionTreeRegressor(maxDepth=2)
+baselearner = BetaML.Trees.DecisionTreeRegressor(max_depth=2)
 X = rand(200, 1)
 f(x) = sum(x.^2)
 σ = 0.1
@@ -312,9 +316,17 @@ plot!(xs, f.(xs))
 for m ∈ eachindex(F)
   plot!(xs, F[m](reshape(xs, size(X))), alpha=m/length(F), colour=:black,legend=false)
 end
+
+function showplot(m)
+  scatter(X, y)
+  p = sortperm(vec(X))
+  xs = X[p]
+  plot!(xs, f.(xs))
+  plot!(xs, F[m](reshape(xs, size(X))), alpha=m/length(F), colour=:black,legend=false)
+end
 </code></pre>
-<pre><code>Error: ArgumentError: Package Zygote not found in current path:
-- Run `import Pkg; Pkg.add("Zygote")` to install the Zygote package.
+<pre><code>import BetaML ✔
+showplot (generic function with 1 method)
 </code></pre>
 <h1 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h1>
 <p>The above code is just for demonstration. It is better to use a package
@@ -326,13 +338,14 @@ Julia implementation and uses some of the same algorithm improvements
 that LightGBM does. Benchmarks on the
 <a href="https://github.com/Evovest/EvoTrees.jl">EvoTrees</a> github readme show
 that it can outperform XGBoost.</p>
-<pre><code class="language-julia">@load LGBMRegressor
-@load XGBoostRegressor
-@load EvoTreeRegressor
+<pre><code class="language-julia">lgbm = @load LGBMRegressor
+xgboost = @load XGBoostRegressor
+evo = @load EvoTreeRegressor
 </code></pre>
-<pre><code>Error: LoadError: UndefVarError: @load not defined
-in expression starting at /home/paul/.julia/dev/GradientBoostingNotes/docs/
-jmd/gb.jmd:2
+<pre><code>import LightGBM ✔
+import MLJXGBoostInterface ✔
+import EvoTrees ✔
+EvoTrees.EvoTreeRegressor
 </code></pre>
 <h1 id="bibliography">Bibliography<a class="headerlink" href="#bibliography" title="Permanent link">&para;</a></h1></div>
             </div>
